@@ -1,0 +1,90 @@
+<!doctype html>
+<html lang="en">
+
+<head>
+    <title>Temperature Hot</title>
+    <!-- Required meta tags -->
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+
+    <!-- Bootstrap CSS -->
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css">
+    <style>
+        body {
+            background: url(images/bg-image.jpg) no-repeat;
+            background-size: cover;
+            height: 100vh;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="container">
+        <form class="col-md-6 m-auto py-5">
+            <div class="input-group mb-3">
+                <input id ="inputName" type="text" class="form-control" placeholder="Enter a location for Weather ...">
+                <div class="input-group-append">
+                    <button id ="inputBtn" type="button" class="btn btn-danger">Search</button>
+                </div>
+            </div>
+        </form>
+        <div class="weather-status text-white text-center">
+            <div id="weatherPicture">
+            
+            </div>
+            <h1 id="showName" class="">Dhaka</h1>
+            <h3><span id="showValue">38.06</span>&deg;C</h3>
+            <h1 id="showWeather" class="lead">Clouds</h1>
+        </div>
+    </div>
+    <script>
+        document.getElementById('inputBtn').addEventListener("click",function(){
+            const name = document.getElementById('inputName').value;
+            
+            let api = `http://api.openweathermap.org/data/2.5/weather?q=${name}&appid=c40de58277d91744b9ee6e1e88794384`;
+            fetch(api)
+            .then(response=>response.json())
+            .then(data=>{
+            const temperature = Math.round(data.main.feels_like-273)
+            
+            const apiName = data.name;
+
+            
+            const weather = data.weather[0].id;
+            
+            if(weather < 250){
+                picture = "http://openweathermap.org/img/wn/11d@2x.png";
+                mainWeather = "Thunderstorm"
+            }else if(weather < 350 ) {
+                picture = "http://openweathermap.org/img/wn/09d@2x.png";
+                mainWeather = "Drizzle"
+            } else if(weather < 500){
+                picture = "http://openweathermap.org/img/wn/10d@2x.png";
+                mainWeather = "Rain"
+            }else if(weather < 650){
+                picture = "http://openweathermap.org/img/wn/13d@2x.png";
+                mainWeather = "Snow"
+            }else if(weather < 800){
+                picture = "http://openweathermap.org/img/wn/50d@2x.png";
+                mainWeather = "Atmosphere"
+            }else if(weather === 800){
+                picture = "http://openweathermap.org/img/wn/01d@2x.png";
+                mainWeather = "Clear"
+            } else if(weather > 800){
+                picture = "http://openweathermap.org/img/wn/02d@2x.png";
+                mainWeather = "Clouds"
+            }
+            document.getElementById("showName").innerText = apiName;
+            document.getElementById("showValue").innerText = temperature;
+            document.getElementById("showWeather").innerText = mainWeather;
+            document.getElementById("weatherPicture").innerHTML = `
+            <img src=${picture} alt ="">
+            `;
+            const name = document.getElementById('inputName').value = "";
+            })
+        })
+    </script>
+
+</body>
+
+</html>
